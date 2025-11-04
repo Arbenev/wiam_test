@@ -41,9 +41,8 @@ class LoanRequest extends \yii\db\ActiveRecord
             ['status', 'in', 'range' => ['new', 'processing', 'approved', 'declined']],
             [['processed_at'], 'default', 'value' => null],
             [['status'], 'default', 'value' => 'new'],
-            [['user_id', 'amount', 'term', 'created_at'], 'required'],
             [['user_id', 'amount', 'term', 'created_at', 'updated_at', 'processed_at'], 'integer'],
-            [['user_id'], 'unique'],
+            // [['user_id'], 'unique'],
         ];
     }
 

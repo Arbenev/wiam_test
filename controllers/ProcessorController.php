@@ -32,8 +32,8 @@ class ProcessorController extends Controller
             $delay = 0;
         }
 
-        $this->service->process($delay, 100);
+        $result = $this->service->process($delay, 100);
 
-        return ['result' => true];
+        return ['result' => true, 'processed' => $result];
     }
 }

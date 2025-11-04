@@ -26,6 +26,12 @@ class m251103_130049_create_loan_request_table extends Migration
             'user_id'
         );
 
+        $this->createIndex(
+            'idx_loan_request_status',
+            '{{%loan_request}}',
+            'status'
+        );
+
         // Ограничение: не более одной approved-заявки на пользователя
         $this->execute(
             "CREATE UNIQUE INDEX ux_loan_request_user_approved
@@ -37,6 +43,7 @@ class m251103_130049_create_loan_request_table extends Migration
     public function safeDown()
     {
         $this->execute("DROP INDEX IF EXISTS ux_loan_request_user_approved;");
+        $this->dropIndex('idx_loan_request_status', '{{%loan_request}}');
         $this->dropIndex('idx_loan_request_user_id', '{{%loan_request}}');
         $this->dropTable('{{%loan_request}}');
     }

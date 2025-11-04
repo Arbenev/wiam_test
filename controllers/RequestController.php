@@ -20,12 +20,14 @@ class RequestController extends Controller
 
     public function actionCreate()
     {
-        $body = Yii::$app->request->getBodyParams();
+        $body = json_decode(Yii::$app->request->getRawBody());
 
         $model = new LoanRequest();
-        $model->user_id = $body['user_id'] ?? null;
-        $model->amount  = $body['amount'] ?? null;
-        $model->term    = $body['term'] ?? null;
+        $model->user_id = $body->user_id ?? null;
+        $model->amount  = $body->amount ?? null;
+        $model->term    = $body->term ?? null;
+        $model->created_at = time();
+        $model->updated_at = time();
         $model->status  = 'new';
 
         // Проверка наличия уже одобренных заявок

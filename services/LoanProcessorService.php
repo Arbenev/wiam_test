@@ -8,7 +8,7 @@ use yii\db\IntegrityException;
 
 class LoanProcessorService
 {
-    public function process(int $delay, int $limit = 100): void
+    public function process(int $delay, int $limit = 100): int
     {
         $processed = 0;
 
@@ -22,6 +22,7 @@ class LoanProcessorService
             sleep($delay);
 
             $approved = (random_int(1, 10) === 1); // 10%
+            // $approved = true; // для тестирования
 
             $transaction = Yii::$app->db->beginTransaction();
             try {
@@ -39,6 +40,8 @@ class LoanProcessorService
                     $request->save(false);
                 } catch (IntegrityException $e) {
                     // Нарушение partial unique index: уже есть approved-заявка
+                    $transaction->rollBack();
+                    $transaction = Yii::$app->db->beginTransaction();
                     $request->status = 'declined';
                     $request->save(false);
                 }
@@ -51,6 +54,7 @@ class LoanProcessorService
 
             $processed++;
         }
+        return $processed;
     }
 
     private function lockNextNewRequest(): ?LoanRequest
