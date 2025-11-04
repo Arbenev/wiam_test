@@ -58,7 +58,7 @@
 docker compose up -d
 ```
 При необходимости можно посмотреть статус контейнеров:
-```
+```bash
 docker compose ps
 ```
 Ожидаемые сервисы:
@@ -105,7 +105,7 @@ docker compose exec app php yii migrate --interactive=0
 - Тело: JSON
 
 #### Пример:
-```
+```json
 {
   "user_id": 123,
   "amount": 10000,
@@ -114,15 +114,13 @@ docker compose exec app php yii migrate --interactive=0
 ```
 #### Правила:
 1. user_id, amount, term — обязательные, положительные целые.
-
 2. Перед созданием заявки выполняется проверка:
-
     - Если у пользователя уже есть заявка со статусом approved, новая заявка не создаётся.
 
 #### Ответ при успехе:
 - Код: 201 Created
 - Тело:
-```
+```json
 {
   "result": true,
   "id": 1
@@ -132,7 +130,7 @@ docker compose exec app php yii migrate --interactive=0
 #### Ответ при ошибке валидации или бизнес-логики:
 - Код: 400 Bad Request
 - Тело:
-```
+```json
 {
   "result": false,
   "errors": {
@@ -149,7 +147,7 @@ docker compose exec app php yii migrate --interactive=0
 - Параметры query:
     - delay (опционально) — задержка обработки каждой заявки в секундах, по умолчанию 5.
 #### Пример:
-```
+```bash
 curl "http://localhost/processor?delay=5"
 ```
 #### Поведение:
@@ -167,10 +165,10 @@ curl "http://localhost/processor?delay=5"
 #### Ответ:
 - Код: 200 OK
 - Тело:
-```
+```json
 {
   "result": true,
-  "processed": <processed>
+  "processed": <количество обработанных записей>
 }
 ```
 Детали по каждой заявке в API не возвращаются; информация сохраняется в таблице loan_request.
