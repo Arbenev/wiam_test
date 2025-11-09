@@ -9,6 +9,9 @@ use app\services\LoanProcessorService;
 
 class ProcessorController extends Controller
 {
+    const MAX_PROCESSING = 100;
+    const DEFAULT_DELAY = 5;
+
     public $enableCsrfValidation = false;
 
     private LoanProcessorService $service;
@@ -27,12 +30,12 @@ class ProcessorController extends Controller
 
     public function actionIndex()
     {
-        $delay = (int)Yii::$app->request->get('delay', 5);
+        $delay = (int)Yii::$app->request->get('delay', self::DEFAULT_DELAY);
         if ($delay < 0) {
             $delay = 0;
         }
 
-        $result = $this->service->process($delay, 100);
+        $result = $this->service->process($delay, self::MAX_PROCESSING);
 
         return ['result' => true, 'processed' => $result];
     }
